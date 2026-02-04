@@ -100,7 +100,7 @@ Base.iterate(p::DomainPartition, i=1) = i > length(p) ? nothing : (p.subdomains[
 # Verification
 ########################################
 
-function correct_coupling_faces(subdomains::Vector{<:AbstractSubdomain{D}}) where {D}
+function correct_coupling_faces(subdomains::Vector{<:AbstractSubdomain{D}}; atol::Float64 = 1e-12) where {D}
     x = zeros(MVector{D, Float64})
     y = zeros(MVector{D, Float64})
 
@@ -139,7 +139,7 @@ function correct_coupling_faces(subdomains::Vector{<:AbstractSubdomain{D}}) wher
                     x[i] = RefIntervalBeg + (v[i]-1) * (RefIntervalEnd-RefIntervalBeg)
                     y[i] = RefIntervalBeg + (w[i]-1) * (RefIntervalEnd-RefIntervalBeg)
                 end
-                !isapprox(ϕ(x), ψ(y)) && return false
+                !isapprox(ϕ(x), ψ(y); atol=atol) && return false
             end
         end
     end
